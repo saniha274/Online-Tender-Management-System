@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login - Tender Management System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #7c3aed,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    #9333ea,
+                    transparent 35%
+                ),
+                #090014;
+
+            color: white;
+
+            padding: 20px;
+        }
+
+        .login-container {
+
+            width: 100%;
+            max-width: 500px;
+
+            padding: 40px;
+
+            border-radius: 22px;
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.18);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        .logo {
+
+            text-align: center;
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+
+            color: #c084fc;
+        }
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #c4b5fd;
+
+            margin-bottom: 30px;
+
+            font-size: 14px;
+        }
+
+        .role-title {
+
+            margin-bottom: 12px;
+
+            font-size: 15px;
+
+            color: #ddd6fe;
+        }
+
+        .role-options {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-bottom: 25px;
+        }
+
+        .role-option {
+
+            padding: 13px 8px;
+
+            text-align: center;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            background:
+                rgba(255, 255, 255, 0.06);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.15);
+
+            transition: 0.3s;
+
+            font-size: 13px;
+
+            color: #ddd6fe;
+        }
+
+        .role-option:hover {
+
+            background:
+                rgba(255, 255, 255, 0.12);
+        }
+
+        .role-option.active {
+
+            background:
+                rgba(168, 85, 247, 0.35);
+
+            border-color:
+                #a855f7;
+
+            color: white;
+        }
+
+        .role-option input {
+
+            display: none;
+        }
+
+        .form-group {
+
+            margin-bottom: 20px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #ddd6fe;
+
+            font-size: 14px;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 15px 16px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.18);
+
+            outline: none;
+
+            background:
+                rgba(0, 0, 0, 0.18);
+
+            color: white;
+
+            font-size: 15px;
+
+            transition: 0.3s;
+        }
+
+        input:focus {
+
+            border-color:
+                #a855f7;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(168, 85, 247, 0.12);
+        }
+
+        input::placeholder {
+
+            color: #9ca3af;
+        }
+
+        .password-wrapper {
+
+            position: relative;
+        }
+
+        .password-wrapper input {
+
+            padding-right: 55px;
+        }
+
+        .toggle-password {
+
+            position: absolute;
+
+            right: 15px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+
+            background: none;
+
+            color: #c4b5fd;
+
+            cursor: pointer;
+
+            font-size: 19px;
+        }
+
+        .login-btn {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9333ea,
+                    #a855f7
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            margin-top: 5px;
+        }
+
+        .login-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(168, 85, 247, 0.3);
+        }
+
+        .login-btn:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        .message {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            text-align: center;
+        }
+
+        .message.success {
+
+            display: block;
+
+            background:
+                rgba(34, 197, 94, 0.15);
+
+            border:
+                1px solid
+                rgba(34, 197, 94, 0.3);
+
+            color: #86efac;
+        }
+
+        .message.error {
+
+            display: block;
+
+            background:
+                rgba(239, 68, 68, 0.15);
+
+            border:
+                1px solid
+                rgba(239, 68, 68, 0.3);
+
+            color: #fca5a5;
+        }
+
+        .links {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+        .links a {
+
+            color: #c084fc;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+        .links a:hover {
+
+            text-decoration: underline;
+        }
+
+        .vendor-register {
+
+            color: #ddd6fe !important;
+        }
+
+        @media (max-width: 500px) {
+
+            .login-container {
+
+                padding: 28px 20px;
+            }
+
+            .role-options {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-container">
+
+
+    <div class="logo">
+
+        <span>TMS</span>
+
+        Login
+
+    </div>
+
+
+    <div class="subtitle">
+
+        Tender Management System
+
+    </div>
+
+
+    <!-- ROLE -->
+
+    <div class="role-title">
+
+        Select your role
+
+    </div>
+
+
+    <div class="role-options">
+
+
+        <label class="role-option active">
+
+            <input
+                type="radio"
+                name="role"
+                value="ADMIN"
+                checked
+            >
+
+            👨‍💼 Admin
+
+        </label>
+
+
+        <label class="role-option">
+
+            <input
+                type="radio"
+                name="role"
+                value="VENDOR"
+            >
+
+            🏢 Vendor
+
+        </label>
+
+
+        <label class="role-option">
+
+            <input
+                type="radio"
+                name="role"
+                value="VISITOR"
+            >
+
+            👤 Visitor
+
+        </label>
+
+
+    </div>
+
+
+    <!-- LOGIN FORM -->
+
+    <form id="loginForm">
+
+
+        <div class="form-group">
+
+            <label for="email">
+
+                Email / User ID
+
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="password">
+
+                Password
+
+            </label>
+
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+
+                <button
+                    type="button"
+                    class="toggle-password"
+                    id="togglePassword"
+                    aria-label="Show password"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="login-btn"
+            id="loginButton"
+        >
+
+            Login
+
+        </button>
+
+
+    </form>
+
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <div class="links">
+
+        <a href="#">
+            Forgot Password?
+        </a>
+
+        <a
+            href="/vendor-register.html"
+            class="vendor-register"
+        >
+            New vendor? Register here
+        </a>
+
+        <a href="/">
+            ← Back to Home
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    // ==========================================
+    // ROLE SELECTION
+    // ==========================================
+
+    const roleOptions =
+        document.querySelectorAll(
+            ".role-option"
+        );
+
+
+    roleOptions.forEach(option => {
+
+        option.addEventListener(
+            "click",
+            function () {
+
+                roleOptions.forEach(item => {
+
+                    item.classList.remove(
+                        "active"
+                    );
+
+                });
+
+                this.classList.add(
+                    "active"
+                );
+
+                const radio =
+                    this.querySelector(
+                        "input"
+                    );
+
+                radio.checked = true;
+
+            }
+        );
+
+    });
+
+
+    // ==========================================
+    // PASSWORD SHOW / HIDE
+    // ==========================================
+
+    const passwordInput =
+        document.getElementById(
+            "password"
+        );
+
+    const togglePassword =
+        document.getElementById(
+            "togglePassword"
+        );
+
+
+    togglePassword.addEventListener(
+        "click",
+        function () {
+
+            if (
+                passwordInput.type ===
+                "password"
+            ) {
+
+                passwordInput.type =
+                    "text";
+
+                togglePassword.textContent =
+                    "🙈";
+
+            } else {
+
+                passwordInput.type =
+                    "password";
+
+                togglePassword.textContent =
+                    "👁️";
+            }
+
+        }
+    );
+
+
+    // ==========================================
+    // SHOW MESSAGE
+    // ==========================================
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+        message.textContent =
+            text;
+
+        message.className =
+            "message " + type;
+
+    }
+
+
+    // ==========================================
+    // LOGIN
+    // ==========================================
+
+    const loginForm =
+        document.getElementById(
+            "loginForm"
+        );
+
+
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const loginButton =
+                document.getElementById(
+                    "loginButton"
+                );
+
+
+            const email =
+                document.getElementById(
+                    "email"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
+
+
+            const selectedRole =
+                document.querySelector(
+                    'input[name="role"]:checked'
+                );
+
+
+            if (!selectedRole) {
+
+                showMessage(
+                    "Please select a role.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const role =
+                selectedRole.value;
+
+
+            // Disable button
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "Logging in...";
+
+
+            showMessage(
+                "",
+                ""
+            );
+
+
+            try {
+
+
+                const formData =
+                    new URLSearchParams();
+
+
+                formData.append(
+                    "email",
+                    email
+                );
+
+
+                formData.append(
+                    "password",
+                    password
+                );
+
+
+                formData.append(
+                    "role",
+                    role
+                );
+
+
+                const response =
+                    await fetch(
+                        "/api/login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded"
+                            },
+
+                            body:
+                                formData.toString()
+                        }
+                    );
+
+
+                const result =
+                    await response.text();
+
+
+                // ==================================
+                // LOGIN SUCCESS
+                // ==================================
+
+                if (response.ok) {
+
+
+                    showMessage(
+                        "Login successful! Redirecting...",
+                        "success"
+                    );
+
+
+                    /*
+                     * ROLE-BASED REDIRECTION
+                     */
+
+                    if (
+                        result ===
+                        "LOGIN_SUCCESS:ADMIN"
+                    ) {
+
+                        setTimeout(
+                            function () {
+
+                                window.location.href =
+                                    "/admin-dashboard.html";
+
+                            },
+                            700
+                        );
+
+
+                    } else if (
+                        result ===
+                        "LOGIN_SUCCESS:VENDOR"
+                    ) {
+
+                        setTimeout(
+                            function () {
+
+                                window.location.href =
+                                    "/vendor-dashboard.html";
+
+                            },
+                            700
+                        );
+
+
+                    } else if (
+                        result ===
+                        "LOGIN_SUCCESS:VISITOR"
+                    ) {
+
+                        setTimeout(
+                            function () {
+
+                                window.location.href =
+                                    "/index.html";
+
+                            },
+                            700
+                        );
+
+
+                    } else {
+
+                        showMessage(
+                            "Login successful, but the user role could not be identified.",
+                            "error"
+                        );
+
+                    }
+
+
+                } else {
+
+
+                    // ==================================
+                    // LOGIN FAILED
+                    // ==================================
+
+                    showMessage(
+                        result,
+                        "error"
+                    );
+
+
+                    loginButton.disabled =
+                        false;
+
+                    loginButton.textContent =
+                        "Login";
+
+                }
+
+
+            } catch (error) {
+
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+
+                showMessage(
+                    "Unable to connect to the server. Please try again.",
+                    "error"
+                );
+
+
+                loginButton.disabled =
+                    false;
+
+                loginButton.textContent =
+                    "Login";
+
+            }
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>

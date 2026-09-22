@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Tenders | TMS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #5b21b6, transparent 35%),
+                radial-gradient(circle at bottom right, #7e22ce, transparent 35%),
+                linear-gradient(135deg, #10001f, #21003d, #12001f);
+            color: white;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #c084fc;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button,
+        .back-btn {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .logout-btn {
+            background: #dc2626;
+        }
+
+        /* =========================
+           GLASS CARD
+        ========================= */
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #e9d5ff;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 14px;
+            color: #ddd6fe;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.25);
+            color: white;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        select option {
+            background: #24003d;
+            color: white;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #c084fc;
+        }
+
+        .create-btn {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #9333ea, #c026d3);
+            padding: 13px 25px;
+        }
+
+        .create-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .success {
+            background: rgba(34,197,94,0.2);
+            border: 1px solid rgba(34,197,94,0.5);
+        }
+
+        .error {
+            background: rgba(239,68,68,0.2);
+            border: 1px solid rgba(239,68,68,0.5);
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        th {
+            color: #d8b4fe;
+            font-size: 14px;
+        }
+
+        td {
+            color: #f3f4f6;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .published {
+            background: rgba(34,197,94,0.2);
+            color: #86efac;
+        }
+
+        .draft {
+            background: rgba(234,179,8,0.2);
+            color: #fde047;
+        }
+
+        .closed {
+            background: rgba(156,163,175,0.2);
+            color: #d1d5db;
+        }
+
+        .cancelled {
+            background: rgba(239,68,68,0.2);
+            color: #fca5a5;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #c4b5fd;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="header">
+
+        <div class="logo">
+            TMS <span>Admin</span>
+        </div>
+
+        <div class="header-buttons">
+
+            <a
+                href="/admin-dashboard.html"
+                class="back-btn"
+            >
+                ← Dashboard
+            </a>
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CREATE TENDER
+    ========================= -->
+
+    <div class="card">
+
+        <h2>➕ Create New Tender</h2>
+
+        <form id="tenderForm">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+
+                    <label>
+                        Tender Title *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Enter tender title"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Description *
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Enter detailed tender description"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        placeholder="Example: IT, Construction, Supply"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Estimated Budget
+                    </label>
+
+                    <input
+                        type="number"
+                        id="estimatedBudget"
+                        name="estimatedBudget"
+                        placeholder="Example: 500000"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Deadline *
+                    </label>
+
+                    <input
+                        type="date"
+                        id="deadline"
+                        name="deadline"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select
+                        id="status"
+                        name="status"
+                    >
+
+                        <option value="DRAFT">
+                            Draft
+                        </option>
+
+                        <option value="PUBLISHED">
+                            Published
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="create-btn"
+            >
+                Create Tender
+            </button>
+
+        </form>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+    </div>
+
+
+    <!-- =========================
+         TENDER LIST
+    ========================= -->
+
+    <div class="card">
+
+        <h2>📋 All Tenders</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Title</th>
+
+                        <th>Category</th>
+
+                        <th>Budget</th>
+
+                        <th>Deadline</th>
+
+                        <th>Status</th>
+
+                        <th>Created</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tenderTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty"
+                        >
+                            Loading tenders...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =========================
+    // LOAD TENDERS
+    // =========================
+
+    async function loadTenders() {
+
+        const tableBody =
+            document.getElementById(
+                "tenderTableBody"
+            );
+
+        try {
+
+            const response =
+                await fetch("/api/tenders");
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load tenders."
+                );
+            }
+
+            const tenders =
+                await response.json();
+
+            tableBody.innerHTML = "";
+
+
+            if (tenders.length === 0) {
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="7"
+                            class="empty"
+                        >
+                            No tenders created yet.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            tenders.forEach(tender => {
+
+                const row =
+                    document.createElement("tr");
+
+                let statusClass =
+                    tender.status.toLowerCase();
+
+                row.innerHTML = `
+
+                    <td>
+                        ${tender.id}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(tender.title)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            tender.category || "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${
+                            tender.estimatedBudget !== null
+                                ? "₹ " +
+                                  Number(
+                                      tender.estimatedBudget
+                                  ).toLocaleString("en-IN")
+                                : "-"
+                        }
+                    </td>
+
+                    <td>
+                        ${tender.deadline}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="status ${statusClass}"
+                        >
+                            ${tender.status}
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${formatDate(
+                            tender.createdAt
+                        )}
+                    </td>
+
+                `;
+
+                tableBody.appendChild(row);
+
+            });
+
+
+        } catch (error) {
+
+            tableBody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty"
+                    >
+                        Failed to load tenders.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            console.error(error);
+        }
+    }
+
+
+    // =========================
+    // CREATE TENDER
+    // =========================
+
+    document
+        .getElementById("tenderForm")
+        .addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const message =
+                    document.getElementById(
+                        "message"
+                    );
+
+
+                const formData =
+                    new URLSearchParams();
+
+
+                formData.append(
+                    "title",
+                    document.getElementById(
+                        "title"
+                    ).value
+                );
+
+                formData.append(
+                    "description",
+                    document.getElementById(
+                        "description"
+                    ).value
+                );
+
+                formData.append(
+                    "category",
+                    document.getElementById(
+                        "category"
+                    ).value
+                );
+
+                formData.append(
+                    "estimatedBudget",
+                    document.getElementById(
+                        "estimatedBudget"
+                    ).value
+                );
+
+                formData.append(
+                    "deadline",
+                    document.getElementById(
+                        "deadline"
+                    ).value
+                );
+
+                formData.append(
+                    "status",
+                    document.getElementById(
+                        "status"
+                    ).value
+                );
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/tenders",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/x-www-form-urlencoded"
+                                },
+
+                                body:
+                                    formData.toString()
+                            }
+                        );
+
+
+                    const result =
+                        await response.text();
+
+
+                    message.style.display =
+                        "block";
+
+
+                    if (response.ok) {
+
+                        message.className =
+                            "message success";
+
+                        message.textContent =
+                            result;
+
+
+                        document
+                            .getElementById(
+                                "tenderForm"
+                            )
+                            .reset();
+
+
+                        loadTenders();
+
+
+                    } else {
+
+                        message.className =
+                            "message error";
+
+                        message.textContent =
+                            result;
+                    }
+
+
+                } catch (error) {
+
+                    message.style.display =
+                        "block";
+
+                    message.className =
+                        "message error";
+
+                    message.textContent =
+                        "Server connection failed.";
+
+                    console.error(error);
+                }
+
+            }
+        );
+
+
+    // =========================
+    // ESCAPE HTML
+    // =========================
+
+    function escapeHtml(value) {
+
+        if (value === null ||
+            value === undefined) {
+
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    // =========================
+    // FORMAT DATE
+    // =========================
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "-";
+        }
+
+        const date =
+            new Date(
+                value.replace(" ", "T")
+            );
+
+        if (isNaN(date.getTime())) {
+            return value;
+        }
+
+        return date.toLocaleDateString(
+            "en-IN"
+        );
+    }
+
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    function logout() {
+
+        window.location.href =
+            "/login.html";
+    }
+
+
+    // =========================
+    // INITIAL LOAD
+    // =========================
+
+    loadTenders();
+
+</script>
+
+</body>
+
+</html>

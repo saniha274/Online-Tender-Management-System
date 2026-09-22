@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vendor Registration - TMS</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+            background: linear-gradient(135deg, #12002f, #2b0057, #4b0082);
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            padding: 35px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #d5c8e8;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            color: #eee;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            outline: none;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 14px;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #aaa;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #c77dff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #ccc;
+            user-select: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #9d4edd;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #7b2cbf;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            line-height: 1.4;
+        }
+
+        .success {
+            display: block;
+            background: rgba(40, 167, 69, 0.2);
+            color: #9cffb0;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .error {
+            display: block;
+            background: rgba(220, 53, 69, 0.2);
+            color: #ff9ca8;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 22px;
+            color: #d5c8e8;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: #e0aaff;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="logo">
+            TMS
+        </div>
+
+        <h1>Vendor Registration</h1>
+
+        <p class="subtitle">
+            Register your organization to participate in available tenders.
+            Your account will require administrator approval.
+        </p>
+
+        <form id="registrationForm">
+
+            <div class="form-group">
+
+                <label for="companyName">
+                    Company Name
+                </label>
+
+                <input
+                    type="text"
+                    id="companyName"
+                    name="companyName"
+                    placeholder="Enter company name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="contactPerson">
+                    Contact Person
+                </label>
+
+                <input
+                    type="text"
+                    id="contactPerson"
+                    name="contactPerson"
+                    placeholder="Enter contact person's name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email / User ID
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="example@gmail.com"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter phone number"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="address">
+                    Company Address
+                </label>
+
+                <textarea
+                    id="address"
+                    name="address"
+                    placeholder="Enter company address"
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required
+                    >
+
+                    <span
+                        class="toggle-password"
+                        onclick="togglePassword()">
+                        👁
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="registerButton">
+
+                Register as Vendor
+
+            </button>
+
+        </form>
+
+
+        <div
+            id="message"
+            class="message">
+        </div>
+
+
+        <div class="links">
+
+            Already have an account?
+
+            <a href="/login.html">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function togglePassword() {
+
+            const password =
+                document.getElementById("password");
+
+            const toggle =
+                document.querySelector(".toggle-password");
+
+
+            if (password.type === "password") {
+
+                password.type = "text";
+
+                toggle.textContent = "🙈";
+
+            } else {
+
+                password.type = "password";
+
+                toggle.textContent = "👁";
+
+            }
+
+        }
+
+
+        document
+            .getElementById("registrationForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+
+                const button =
+                    document.getElementById("registerButton");
+
+                const message =
+                    document.getElementById("message");
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Registering...";
+
+                message.className = "message";
+
+                message.textContent = "";
+
+
+                const formData =
+                    new URLSearchParams();
+
+
+                formData.append(
+                    "companyName",
+                    document.getElementById("companyName").value
+                );
+
+                formData.append(
+                    "contactPerson",
+                    document.getElementById("contactPerson").value
+                );
+
+                formData.append(
+                    "email",
+                    document.getElementById("email").value
+                );
+
+                formData.append(
+                    "phone",
+                    document.getElementById("phone").value
+                );
+
+                formData.append(
+                    "address",
+                    document.getElementById("address").value
+                );
+
+                formData.append(
+                    "password",
+                    document.getElementById("password").value
+                );
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/vendor/register",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/x-www-form-urlencoded"
+                                },
+
+                                body:
+                                    formData.toString()
+                            }
+                        );
+
+
+                    const result =
+                        await response.text();
+
+
+                    if (response.ok) {
+
+                        message.className =
+                            "message success";
+
+                        message.textContent =
+                            result;
+
+                        document
+                            .getElementById("registrationForm")
+                            .reset();
+
+                    } else {
+
+                        message.className =
+                            "message error";
+
+                        message.textContent =
+                            result;
+                    }
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    message.className =
+                        "message error";
+
+                    message.textContent =
+                        "Unable to connect to the server.";
+
+                }
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Register as Vendor";
+
+            });
+
+    </script>
+
+</body>
+
+</html>

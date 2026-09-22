@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tender Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #16002b, #3b0a68, #12001f);
+            color: white;
+        }
+
+        nav {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .hero {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #d39aff;
+        }
+
+        .hero p {
+            font-size: 19px;
+            line-height: 1.7;
+            color: #ddd;
+            margin-bottom: 35px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #a855f7;
+            color: white;
+        }
+
+        .secondary {
+            border: 1px solid #a855f7;
+            color: white;
+        }
+
+        .role-section {
+            margin-left: auto;
+            width: 330px;
+            padding: 30px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .role-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .role {
+            display: block;
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .role:hover {
+            background: rgba(168,85,247,0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">TMS</div>
+
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Tenders</a>
+        <a href="#">About</a>
+    </div>
+</nav>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Tender <span>Management</span> System
+        </h1>
+
+        <p>
+            A centralized platform for managing tenders, vendors,
+            bidding and procurement activities efficiently and securely.
+        </p>
+
+        <div class="buttons">
+            <a href="#" class="btn primary">Explore Tenders</a>
+            <a href="/login.html" class="btn secondary">Login</a>
+        </div>
+
+    </div>
+
+    <div class="role-section">
+
+        <h2>Access Portal</h2>
+
+        <a href="#" class="role">
+            🔐 Admin Portal
+        </a>
+
+        <a href="#" class="role">
+            🏢 Vendor Portal
+        </a>
+
+        <a href="#" class="role">
+            👤 Visitor Portal
+        </a>
+
+    </div>
+
+</section>
+
+</body>
+</html>

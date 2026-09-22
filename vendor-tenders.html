@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Available Tenders - TMS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #5b21b6,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    #7e22ce,
+                    transparent 35%
+                ),
+                #10001f;
+
+            color: white;
+
+            padding: 30px;
+        }
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 20px 30px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.15);
+
+            border-radius: 18px;
+
+            backdrop-filter: blur(15px);
+
+            margin-bottom: 35px;
+        }
+
+        .logo {
+
+            font-size: 25px;
+
+            font-weight: bold;
+        }
+
+        .nav {
+
+            display: flex;
+
+            gap: 15px;
+        }
+
+        .nav a {
+
+            text-decoration: none;
+
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            transition: 0.3s;
+        }
+
+        .nav a:hover {
+
+            background:
+                rgba(255,255,255,0.2);
+        }
+
+        .nav .logout {
+
+            background:
+                rgba(239,68,68,0.25);
+
+            border:
+                1px solid
+                rgba(239,68,68,0.4);
+        }
+
+        .container {
+
+            max-width: 1200px;
+
+            margin: auto;
+        }
+
+        h1 {
+
+            font-size: 36px;
+
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+
+            color: #d8c8ff;
+
+            margin-bottom: 30px;
+        }
+
+        .message {
+
+            padding: 15px 20px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            display: none;
+
+            background:
+                rgba(255,255,255,0.1);
+        }
+
+        .message.success {
+
+            display: block;
+
+            border:
+                1px solid #22c55e;
+
+            color: #86efac;
+        }
+
+        .message.error {
+
+            display: block;
+
+            border:
+                1px solid #ef4444;
+
+            color: #fca5a5;
+        }
+
+        .tender-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(300px, 1fr)
+                );
+
+            gap: 25px;
+        }
+
+        .tender-card {
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.15);
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            backdrop-filter: blur(15px);
+
+            transition: 0.3s;
+        }
+
+        .tender-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            background:
+                rgba(255,255,255,0.12);
+        }
+
+        .tender-card h2 {
+
+            margin-bottom: 12px;
+        }
+
+        .category {
+
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(168,85,247,0.25);
+
+            color: #d8b4fe;
+
+            font-size: 13px;
+
+            margin-bottom: 15px;
+        }
+
+        .description {
+
+            color: #ddd;
+
+            line-height: 1.6;
+
+            margin-bottom: 20px;
+        }
+
+        .info {
+
+            margin-bottom: 8px;
+
+            color: #ddd;
+        }
+
+        .info strong {
+
+            color: white;
+        }
+
+        .view-btn {
+
+            width: 100%;
+
+            margin-top: 18px;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9333ea,
+                    #6d28d9
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .view-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 25px
+                rgba(147,51,234,0.4);
+        }
+
+        .modal {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,0.75);
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+            z-index: 1000;
+        }
+
+        .modal-content {
+
+            width: 100%;
+
+            max-width: 650px;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #24103d,
+                    #16001f
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,0.15);
+
+            border-radius: 20px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 25px 80px
+                rgba(0,0,0,0.6);
+        }
+
+        .modal-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .close {
+
+            font-size: 28px;
+
+            cursor: pointer;
+
+            color: #ddd;
+        }
+
+        .close:hover {
+
+            color: white;
+        }
+
+        .detail {
+
+            margin-bottom: 15px;
+
+            line-height: 1.6;
+
+            color: #ddd;
+        }
+
+        .detail strong {
+
+            color: white;
+        }
+
+        .bid-section {
+
+            margin-top: 25px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.15);
+        }
+
+        .bid-section h3 {
+
+            margin-bottom: 18px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #ddd;
+
+            font-size: 14px;
+        }
+
+        input,
+        textarea {
+
+            width: 100%;
+
+            padding: 13px;
+
+            margin-bottom: 17px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.15);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            color: white;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        input:focus,
+        textarea:focus {
+
+            border-color: #a855f7;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+
+            color: #aaa;
+        }
+
+        textarea {
+
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+        .submit-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #a855f7,
+                    #7e22ce
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+
+            box-shadow:
+                0 8px 25px
+                rgba(168,85,247,0.4);
+        }
+
+        .submit-btn:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+        }
+
+        .empty {
+
+            text-align: center;
+
+            padding: 50px;
+
+            color: #bbb;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="logo">
+        TMS Vendor Portal
+    </div>
+
+    <div class="nav">
+
+        <a href="/vendor-dashboard.html">
+            Dashboard
+        </a>
+
+        <a
+            href="/login.html"
+            class="logout"
+            onclick="logoutUser()"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+    <h1>
+        Available Tenders
+    </h1>
+
+    <p class="subtitle">
+        Browse published tenders and submit your bids.
+    </p>
+
+
+    <div
+        id="message"
+        class="message">
+    </div>
+
+
+    <div
+        id="tenderGrid"
+        class="tender-grid">
+
+        <div class="empty">
+            Loading tenders...
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TENDER MODAL -->
+
+<div
+    id="tenderModal"
+    class="modal">
+
+    <div class="modal-content">
+
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Tender Details
+            </h2>
+
+            <span
+                class="close"
+                onclick="closeModal()">
+                &times;
+            </span>
+
+        </div>
+
+
+        <div id="modalDetails">
+        </div>
+
+
+        <!-- BID -->
+
+        <div class="bid-section">
+
+            <h3>
+                Submit Your Bid
+            </h3>
+
+
+            <form id="bidForm">
+
+
+                <label>
+                    Bid Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="bidAmount"
+                    placeholder="Enter your bid amount"
+                    min="1"
+                    step="0.01"
+                    required
+                >
+
+
+                <label>
+                    Proposal
+                </label>
+
+                <textarea
+                    id="proposal"
+                    placeholder="Describe your proposal, approach and deliverables..."
+                    required
+                ></textarea>
+
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="submitBidBtn">
+                    🚀 Submit Bid
+                </button>
+
+            </form>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+    // Approved vendor ID
+    const vendorId = 1;
+
+
+    let selectedTenderId = null;
+
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+
+    function logoutUser() {
+
+        sessionStorage.clear();
+
+        localStorage.clear();
+
+    }
+
+
+    // ==========================================
+    // LOAD TENDERS
+    // ==========================================
+
+    async function loadTenders() {
+
+        const grid =
+            document.getElementById(
+                "tenderGrid"
+            );
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/tenders"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load tenders."
+                );
+            }
+
+
+            const tenders =
+                await response.json();
+
+
+            const publishedTenders =
+                tenders.filter(
+                    tender =>
+                        tender.status ===
+                        "PUBLISHED"
+                );
+
+
+            if (
+                publishedTenders.length === 0
+            ) {
+
+                grid.innerHTML = `
+                    <div class="empty">
+                        No published tenders are
+                        currently available.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            grid.innerHTML = "";
+
+
+            publishedTenders.forEach(
+                tender => {
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    card.className =
+                        "tender-card";
+
+
+                    const budget =
+                        tender.estimatedBudget
+                            ? Number(
+                                tender.estimatedBudget
+                              ).toLocaleString(
+                                  "en-IN",
+                                  {
+                                      style: "currency",
+                                      currency: "INR"
+                                  }
+                              )
+                            : "Not specified";
+
+
+                    card.innerHTML = `
+
+                        <span class="category">
+                            ${escapeHtml(
+                                tender.category ||
+                                "General"
+                            )}
+                        </span>
+
+                        <h2>
+                            ${escapeHtml(
+                                tender.title
+                            )}
+                        </h2>
+
+                        <p class="description">
+                            ${escapeHtml(
+                                tender.description
+                            )}
+                        </p>
+
+                        <div class="info">
+
+                            <strong>
+                                Estimated Budget:
+                            </strong>
+
+                            ${budget}
+
+                        </div>
+
+                        <div class="info">
+
+                            <strong>
+                                Deadline:
+                            </strong>
+
+                            ${escapeHtml(
+                                tender.deadline
+                            )}
+
+                        </div>
+
+                        <div class="info">
+
+                            <strong>
+                                Tender ID:
+                            </strong>
+
+                            ${tender.id}
+
+                        </div>
+
+                        <button
+                            class="view-btn"
+                            onclick="openTender(${tender.id})">
+
+                            View Tender & Submit Bid
+
+                        </button>
+
+                    `;
+
+
+                    grid.appendChild(card);
+
+                }
+            );
+
+
+        } catch (error) {
+
+            grid.innerHTML = `
+                <div class="empty">
+                    Failed to load tenders.
+                    Please try again.
+                </div>
+            `;
+
+            console.error(error);
+        }
+    }
+
+
+    // ==========================================
+    // OPEN TENDER
+    // ==========================================
+
+    async function openTender(
+        tenderId
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/tenders"
+                );
+
+
+            const tenders =
+                await response.json();
+
+
+            const tender =
+                tenders.find(
+                    item =>
+                        item.id === tenderId
+                );
+
+
+            if (!tender) {
+
+                showMessage(
+                    "Tender not found.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            selectedTenderId =
+                tender.id;
+
+
+            document.getElementById(
+                "modalTitle"
+            ).textContent =
+                tender.title;
+
+
+            const budget =
+                tender.estimatedBudget
+                    ? Number(
+                        tender.estimatedBudget
+                      ).toLocaleString(
+                          "en-IN",
+                          {
+                              style: "currency",
+                              currency: "INR"
+                          }
+                      )
+                    : "Not specified";
+
+
+            document.getElementById(
+                "modalDetails"
+            ).innerHTML = `
+
+                <div class="detail">
+
+                    <strong>
+                        Category:
+                    </strong>
+
+                    ${escapeHtml(
+                        tender.category ||
+                        "General"
+                    )}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Description:
+                    </strong>
+
+                    <br>
+
+                    ${escapeHtml(
+                        tender.description
+                    )}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Estimated Budget:
+                    </strong>
+
+                    ${budget}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Deadline:
+                    </strong>
+
+                    ${escapeHtml(
+                        tender.deadline
+                    )}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Tender ID:
+                    </strong>
+
+                    ${tender.id}
+
+                </div>
+
+            `;
+
+
+            document.getElementById(
+                "bidAmount"
+            ).value = "";
+
+
+            document.getElementById(
+                "proposal"
+            ).value = "";
+
+
+            document.getElementById(
+                "tenderModal"
+            ).style.display =
+                "flex";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to open tender details.",
+                "error"
+            );
+        }
+    }
+
+
+    // ==========================================
+    // SUBMIT BID
+    // ==========================================
+
+    document.getElementById(
+        "bidForm"
+    ).addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            if (!selectedTenderId) {
+
+                showMessage(
+                    "Please select a tender first.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const bidAmount =
+                document.getElementById(
+                    "bidAmount"
+                ).value;
+
+
+            const proposal =
+                document.getElementById(
+                    "proposal"
+                ).value;
+
+
+            if (
+                !bidAmount ||
+                Number(bidAmount) <= 0
+            ) {
+
+                showMessage(
+                    "Please enter a valid bid amount.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (!proposal.trim()) {
+
+                showMessage(
+                    "Please enter your proposal.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const button =
+                document.getElementById(
+                    "submitBidBtn"
+                );
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Submitting...";
+
+
+            try {
+
+                const formData =
+                    new URLSearchParams();
+
+
+                formData.append(
+                    "tenderId",
+                    selectedTenderId
+                );
+
+
+                formData.append(
+                    "vendorId",
+                    vendorId
+                );
+
+
+                formData.append(
+                    "bidAmount",
+                    bidAmount
+                );
+
+
+                formData.append(
+                    "proposal",
+                    proposal
+                );
+
+
+                const response =
+                    await fetch(
+                        "/api/bids",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded"
+
+                            },
+
+                            body:
+                                formData.toString()
+
+                        }
+                    );
+
+
+                const result =
+                    await response.text();
+
+
+                if (response.ok) {
+
+                    closeModal();
+
+
+                    showMessage(
+                        "✅ " + result,
+                        "success"
+                    );
+
+                } else {
+
+                    showMessage(
+                        "❌ " + result,
+                        "error"
+                    );
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                showMessage(
+                    "Unable to submit bid. Please try again.",
+                    "error"
+                );
+
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "🚀 Submit Bid";
+            }
+
+        }
+    );
+
+
+    // ==========================================
+    // CLOSE MODAL
+    // ==========================================
+
+    function closeModal() {
+
+        document.getElementById(
+            "tenderModal"
+        ).style.display =
+            "none";
+
+
+        selectedTenderId = null;
+    }
+
+
+    // ==========================================
+    // CLOSE MODAL OUTSIDE
+    // ==========================================
+
+    window.addEventListener(
+        "click",
+        function(event) {
+
+            const modal =
+                document.getElementById(
+                    "tenderModal"
+                );
+
+
+            if (event.target === modal) {
+
+                closeModal();
+            }
+
+        }
+    );
+
+
+    // ==========================================
+    // MESSAGE
+    // ==========================================
+
+    function showMessage(
+        message,
+        type
+    ) {
+
+        const element =
+            document.getElementById(
+                "message"
+            );
+
+
+        element.textContent =
+            message;
+
+
+        element.className =
+            "message " + type;
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+
+        setTimeout(
+            function() {
+
+                element.className =
+                    "message";
+
+            },
+            5000
+        );
+    }
+
+
+    // ==========================================
+    // ESCAPE HTML
+    // ==========================================
+
+    function escapeHtml(
+        value
+    ) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+        }
+
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+    }
+
+
+    // ==========================================
+    // START
+    // ==========================================
+
+    loadTenders();
+
+</script>
+
+
+</body>
+
+</html>
